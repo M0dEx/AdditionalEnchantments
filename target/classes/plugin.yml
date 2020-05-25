@@ -1,9 +1,0 @@
-name: AdditionalEnchantments
-version: 1.0.0
-main: eu.m0dex.additionalenchantments.AdditionalEnchantments
-author: M0dEx
-commands:
-    additionalenchantments:
-        description: Main command.
-        usage: /ae
-        aliases: ae
