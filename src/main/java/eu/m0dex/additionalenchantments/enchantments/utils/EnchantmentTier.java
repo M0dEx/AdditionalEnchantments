@@ -1,4 +1,4 @@
-package eu.m0dex.additionalenchantments.enchantments;
+package eu.m0dex.additionalenchantments.enchantments.utils;
 
 import java.util.Arrays;
 

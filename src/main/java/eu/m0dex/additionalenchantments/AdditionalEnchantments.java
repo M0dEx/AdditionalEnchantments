@@ -1,14 +1,17 @@
 package eu.m0dex.additionalenchantments;
 
+import eu.m0dex.additionalenchantments.commands.AdditionalEnchantmentsCommand;
+import eu.m0dex.additionalenchantments.commands.CommandExecutor;
 import eu.m0dex.additionalenchantments.commands.CommandModule;
-import eu.m0dex.additionalenchantments.enchantments.EnchantmentManager;
+import eu.m0dex.additionalenchantments.enchantments.utils.EnchantmentManager;
+import eu.m0dex.additionalenchantments.listeners.EnchantmentsListener;
 import eu.m0dex.additionalenchantments.utils.Configuration;
 import eu.m0dex.additionalenchantments.utils.Messages;
 import eu.m0dex.additionalenchantments.utils.Metrics;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class AdditionalEnchantments extends JavaPlugin {
@@ -16,6 +19,7 @@ public class AdditionalEnchantments extends JavaPlugin {
     private EnchantmentManager enchantmentManager;
 
     private Map<String, CommandModule> commands;
+    private CommandExecutor cmdExec;
 
     private Configuration messagesCfg;
 
@@ -29,10 +33,11 @@ public class AdditionalEnchantments extends JavaPlugin {
         instance = this;
 
         loadConfigs();
-        registerCommands();
-        registerListeners();
 
         enchantmentManager = new EnchantmentManager(this);
+
+        registerCommands();
+        registerListeners();
 
         initializeMetrics();
     }
@@ -48,6 +53,7 @@ public class AdditionalEnchantments extends JavaPlugin {
     private void loadConfigs() {
 
         messagesCfg =   new Configuration(this, "", "messages.yml");
+        messagesCfg.reloadConfig();
 
         instance.saveDefaultConfig();
         instance.getConfig().options().copyDefaults(true);
@@ -78,7 +84,10 @@ public class AdditionalEnchantments extends JavaPlugin {
      */
     private void registerCommands() {
 
-        //TODO: Commands
+        commands = new HashMap<>();
+        cmdExec = new CommandExecutor(this);
+
+        new AdditionalEnchantmentsCommand(this);
     }
 
     /**
@@ -88,7 +97,7 @@ public class AdditionalEnchantments extends JavaPlugin {
 
         PluginManager pm = this.getServer().getPluginManager();
 
-        //TODO: Event listeners
+        pm.registerEvents(new EnchantmentsListener(this), this);
     }
 
     /**
@@ -97,6 +106,13 @@ public class AdditionalEnchantments extends JavaPlugin {
     private void initializeMetrics() {
 
         metrics = new Metrics(this, 6741);
+    }
+
+    public void addCommand(String cmdName, CommandModule module) {
+        if(commands != null && !commands.containsKey(cmdName)) {
+            commands.put(cmdName, module);
+            this.getCommand(cmdName).setExecutor(cmdExec);
+        }
     }
 
     /**

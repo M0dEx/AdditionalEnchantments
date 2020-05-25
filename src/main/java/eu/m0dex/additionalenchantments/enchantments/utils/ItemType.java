@@ -1,4 +1,4 @@
-package eu.m0dex.additionalenchantments.enchantments;
+package eu.m0dex.additionalenchantments.enchantments.utils;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +16,9 @@ public enum ItemType {
     ARMOR(Stream.of(BOOTS.getItems(), LEGGINGS.getItems(), CHESTPLATES.getItems(), HELMETS.getItems()).flatMap(List::stream).collect(Collectors.toList())),
     SWORDS(new Material[] { Material.WOOD_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLD_SWORD, Material.DIAMOND_SWORD }),
     PICKAXES(new Material[] { Material.WOOD_PICKAXE, Material.STONE_PICKAXE, Material.IRON_PICKAXE, Material.GOLD_PICKAXE, Material.DIAMOND_PICKAXE }),
-    AXES(new Material[] { Material.WOOD_AXE, Material.STONE_AXE, Material.IRON_AXE, Material.GOLD_AXE, Material.DIAMOND_AXE });
+    AXES(new Material[] { Material.WOOD_AXE, Material.STONE_AXE, Material.IRON_AXE, Material.GOLD_AXE, Material.DIAMOND_AXE }),
+    BOW(new Material[] { Material.BOW }),
+    WEAPONS(Stream.of(SWORDS.getItems(), AXES.getItems(), BOW.getItems()).flatMap(List::stream).collect(Collectors.toList()));
 
     List<Material> items;
 

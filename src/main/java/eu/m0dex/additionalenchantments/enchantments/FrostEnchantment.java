@@ -2,7 +2,7 @@ package eu.m0dex.additionalenchantments.enchantments;
 
 import eu.m0dex.additionalenchantments.enchantments.utils.*;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
@@ -10,7 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.Random;
 
-public class CowardiceEnchantment extends Enchantment {
+public class FrostEnchantment extends Enchantment {
 
     private int cooldown;
     private int effectLevel;
@@ -21,13 +21,13 @@ public class CowardiceEnchantment extends Enchantment {
 
     private Random random;
 
-    public CowardiceEnchantment(CustomEnchantment[] requiredEnchantments, CustomEnchantment[] conflictingEnchantments) {
+    public FrostEnchantment(CustomEnchantment[] requiredEnchantments, CustomEnchantment[] conflictingEnchantments) {
 
-        super("Cowardice", EnchantmentTier.COMMON, ItemType.BOOTS, EnchantmentPriority.LOWEST, EnchantmentEventType.ENTITY_ENTITY_DAMAGE, requiredEnchantments, conflictingEnchantments);
+        super("Frost", EnchantmentTier.COMMON, ItemType.SWORDS, EnchantmentPriority.LOWEST, EnchantmentEventType.ENTITY_ENTITY_DAMAGE, requiredEnchantments, conflictingEnchantments);
 
         random = new Random();
 
-        getConf("enchantments.common.cowardice");
+        getConf("enchantments.uncommon.frost");
     }
 
     @Override
@@ -54,13 +54,11 @@ public class CowardiceEnchantment extends Enchantment {
 
         EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
 
-        Player player = (Player) e.getEntity();
-
         //TODO: Check for cooldown
 
         int roll = random.nextInt(100) + 1;
 
         if(roll < baseChance + chanceIncrease * (level-1))
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (int)(20*(baseDuration+(level-1)*durationIncrease)), effectLevel - 1));
+            ((LivingEntity) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int)(20*(baseDuration+(level-1)*durationIncrease)), effectLevel - 1));
     }
 }

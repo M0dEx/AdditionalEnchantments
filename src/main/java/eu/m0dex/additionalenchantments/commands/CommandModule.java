@@ -25,6 +25,8 @@ public abstract class CommandModule {
             this.maxArgs = 99;
         else
             this.maxArgs = _maxArgs;
+
+        instance.addCommand(cmdName, this);
     }
 
     public abstract void run(CommandSender sender, CommandContext args);

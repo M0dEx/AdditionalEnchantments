@@ -6,7 +6,7 @@ public enum Messages {
 
     // Basic messages
     PLAYER_ONLY_COMMAND(""),
-    NO_PERMISSION("&3&lFunQuiz &e&l» &c&lYou do not have the permission to do this!");
+    NO_PERMISSION("&3&lAdditionalEnchantments &e&l» &c&lYou do not have the permission to do this!");
 
 
     private String path;

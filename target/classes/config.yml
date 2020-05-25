@@ -3,30 +3,20 @@ enchantments:
         cowardice:
             max-level: 3
             cooldown: 15
-            effect-level: 2
+            speed-level: 2
             base-chance: 10
             chance-increase: 5
             base-duration: 2
             duration-increase: 1
-        poison:
-            max-level: 3
-            cooldown: 5
-            effect-level: 2
-            base-chance: 5
-            chance-increase: 2.5
-            base-duration: 2
-            duration-increase: 0.5
         frost:
             max-level: 3
-            cooldown: 5
-            effect-level: 2
-            base-chance: 5
-            chance-increase: 2.5
+            slowness-level: 2
+            base-chance: 10
+            chance-increase: 5
             base-duration: 2
-            duration-increase: 0.5
+            duration-increase: 1
         marksman:
             max-level: 3
-            cooldown: 5
             speed-level: 2
             base-chance: 25
             chance-increase: 5
@@ -45,7 +35,7 @@ enchantments:
     rare:
         berserk:
             max-level: 5
-            base-scaling: 1.125
+            base-scaling: 1
             scaling-increase: 0.125
         lifesteal:
             max-level: 3
