@@ -1,6 +1,7 @@
 package eu.m0dex.additionalenchantments.listeners;
 
 import eu.m0dex.additionalenchantments.AdditionalEnchantments;
+<<<<<<< HEAD
 import eu.m0dex.additionalenchantments.enchantments.utils.CustomEnchantment;
 import eu.m0dex.additionalenchantments.enchantments.utils.EnchantmentEventType;
 import eu.m0dex.additionalenchantments.enchantments.utils.EnchantmentManager;
@@ -19,11 +20,23 @@ import java.util.Comparator;
 import java.util.List;
 
 public class EnchantmentsListener implements Listener {
+=======
+import eu.m0dex.additionalenchantments.enchantments.utils.EnchantmentManager;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+
+public class PlayerDamageListener implements Listener {
+>>>>>>> 15a89794d4f796fdfe19580f67d53512ed01611c
 
     AdditionalEnchantments instance;
     EnchantmentManager enchantmentManager;
 
+<<<<<<< HEAD
     public EnchantmentsListener(AdditionalEnchantments _instance) {
+=======
+    public PlayerDamageListener(AdditionalEnchantments _instance) {
+>>>>>>> 15a89794d4f796fdfe19580f67d53512ed01611c
 
         instance = _instance;
         enchantmentManager = instance.getEnchantmentManager();
@@ -32,6 +45,7 @@ public class EnchantmentsListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 
+<<<<<<< HEAD
         Entity damaged = event.getEntity();
         Entity damager = event.getDamager();
 
@@ -78,5 +92,10 @@ public class EnchantmentsListener implements Listener {
 
         for(CustomEnchantment enchantment : enchantments)
             enchantment.handleEvent(event);
+=======
+        enchantmentManager.getEnchantment("cowardice").handleEvent(event);
+        enchantmentManager.getEnchantment("poison").handleEvent(event);
+        enchantmentManager.getEnchantment("frost").handleEvent(event);
+>>>>>>> 15a89794d4f796fdfe19580f67d53512ed01611c
     }
 }

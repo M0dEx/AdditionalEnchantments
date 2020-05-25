@@ -1,11 +1,6 @@
-package eu.m0dex.additionalenchantments.enchantments.utils;
+package eu.m0dex.additionalenchantments.enchantments;
 
 import eu.m0dex.additionalenchantments.AdditionalEnchantments;
-import eu.m0dex.additionalenchantments.enchantments.CowardiceEnchantment;
-import eu.m0dex.additionalenchantments.enchantments.Enchantment;
-import eu.m0dex.additionalenchantments.enchantments.FrostEnchantment;
-import eu.m0dex.additionalenchantments.enchantments.PoisonEnchantment;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -26,20 +21,12 @@ public class EnchantmentManager {
 
         enchantments = new HashMap<>();
 
-        enchantments.put("cowardice", new CowardiceEnchantment(new CustomEnchantment[] {}, new CustomEnchantment[] {}));
-        enchantments.put("poison", new PoisonEnchantment(new CustomEnchantment[] {}, new CustomEnchantment[] {}));
-        enchantments.put("frost", new FrostEnchantment(new CustomEnchantment[] {}, new CustomEnchantment[] {}));
+        enchantments.put("cowardice", new CowardiceEnchantment(new Enchantment[] {}, new Enchantment[] {}));
     }
 
-    /**
-     * Gets all custom enchantments on the specified item
-     *
-     * @param item Item to be checked for enchantments
-     * @return A list of custom enchantments
-     */
-    public static List<CustomEnchantment> getEnchantmentsOnItem(ItemStack item) {
+    public List<Enchantment> getEnchantmentsOnItem(ItemStack item) {
 
-        List<CustomEnchantment> foundEnchantments = new ArrayList<>();
+        List<Enchantment> foundEnchantments = new ArrayList<>();
 
         if(item == null || !item.hasItemMeta())
             return foundEnchantments;
@@ -51,87 +38,26 @@ public class EnchantmentManager {
 
         List<String> lore = meta.getLore();
 
-        for(String line : lore) {
-            CustomEnchantment enchantment = CustomEnchantment.fromString(line);
-            if(enchantment != null)
-                foundEnchantments.add(enchantment);
-        }
+        for(String line : lore)
+            for(Enchantment enchantment : enchantments.values())
+                if(line.contains(enchantment.getName()))
+                    foundEnchantments.add(enchantment);
 
         return foundEnchantments;
     }
 
-    /**
-     * Gets all custom enchantments on the specified item which are handled on the specified event type
-     *
-     * @param item Item to be checked for enchantments
-     * @param eventType Event type of the enchantment
-     * @return A list of custom enchantments
-     */
-    public static List<CustomEnchantment> getEnchantmentsOnItem(ItemStack item, EnchantmentEventType eventType) {
+    public boolean enchantItem(ItemStack item, Enchantment enchantment, int level) {
 
-        List<CustomEnchantment> foundEnchantments = new ArrayList<>();
-
-        if(item == null || item.getType() == Material.AIR || item.getItemMeta() == null)
-            return foundEnchantments;
+        if(item == null || /*!item.hasItemMeta() ||*/ !enchantment.isApplicableToItem(item, level))
+            return false;
 
         ItemMeta meta = item.getItemMeta();
+        List<String> lore = (meta.hasLore() ? meta.getLore() : new ArrayList<>());
 
-        if(!meta.hasLore())
-            return foundEnchantments;
-
-        List<String> lore = meta.getLore();
-
-        for(String line : lore) {
-            CustomEnchantment enchantment = CustomEnchantment.fromString(line);
-            if(enchantment != null && enchantment.getEnchantment().getEventType() == eventType)
-                foundEnchantments.add(enchantment);
-        }
-
-        return foundEnchantments;
-    }
-
-    /**
-     * Puts the enchantments on the ItemStack
-     *
-     * @param item Item to put the enchantments on
-     * @param enchantments List of enchantments
-     */
-    private static void putEnchantmentsOnItem(ItemStack item, List<CustomEnchantment> enchantments) {
-
-        ItemMeta meta = item.getItemMeta();
-        List<String> lore = new ArrayList<>();
-
-        for(CustomEnchantment enchantment : enchantments)
-            lore.add(enchantment.toString());
+        lore.add(enchantment.toEnchantmentString(level));
 
         meta.setLore(lore);
         item.setItemMeta(meta);
-    }
-
-    /**
-     * Checks if it is possible to enchant the item with the specified enchantment of the specified level and if so, enchants it
-     *
-     * @param item Item to enchant
-     * @param enchantment Enchantment to put on the item
-     * @param level Level of the enchantment
-     * @return True if enchanting the item was successful, false if it was not
-     */
-    public static boolean enchantItem(ItemStack item, Enchantment enchantment, int level) {
-
-        List<CustomEnchantment> enchantmentsOnItem = getEnchantmentsOnItem(item);
-
-        if(!enchantment.isApplicableToItem(enchantmentsOnItem, item, level))
-            return false;
-
-        CustomEnchantment newEnchantment = new CustomEnchantment(enchantment, level);
-        int index = enchantmentsOnItem.indexOf(newEnchantment);
-
-        if(index != -1)
-            enchantmentsOnItem.set(index, newEnchantment);
-        else
-            enchantmentsOnItem.add(newEnchantment);
-
-        putEnchantmentsOnItem(item, enchantmentsOnItem);
 
         return true;
     }

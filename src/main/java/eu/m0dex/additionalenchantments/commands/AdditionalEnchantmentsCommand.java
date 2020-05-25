@@ -1,5 +1,6 @@
 package eu.m0dex.additionalenchantments.commands;
 
+<<<<<<< HEAD
 import eu.m0dex.additionalenchantments.AdditionalEnchantments;
 import eu.m0dex.additionalenchantments.enchantments.Enchantment;
 import eu.m0dex.additionalenchantments.utils.Common;
@@ -44,4 +45,7 @@ public class AdditionalEnchantmentsCommand extends CommandModule {
     public void help(CommandSender sender) {
         Common.tell(sender, Messages.NO_PERMISSION);
     }
+=======
+public class AdditionalEnchantmentsCommand {
+>>>>>>> 15a89794d4f796fdfe19580f67d53512ed01611c
 }

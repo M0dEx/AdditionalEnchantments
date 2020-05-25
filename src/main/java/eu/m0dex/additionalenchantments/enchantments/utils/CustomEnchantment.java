@@ -1,5 +1,6 @@
 package eu.m0dex.additionalenchantments.enchantments.utils;
 
+<<<<<<< HEAD
 import eu.m0dex.additionalenchantments.AdditionalEnchantments;
 import eu.m0dex.additionalenchantments.enchantments.Enchantment;
 import eu.m0dex.additionalenchantments.utils.Common;
@@ -64,4 +65,7 @@ public class CustomEnchantment {
         if(_level >= 0 || _level < enchantment.getMaxLevel())
             level = _level;
     }
+=======
+public class CustomEnchantment {
+>>>>>>> 15a89794d4f796fdfe19580f67d53512ed01611c
 }
