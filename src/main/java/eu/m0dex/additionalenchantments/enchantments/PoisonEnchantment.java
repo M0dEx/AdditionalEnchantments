@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package eu.m0dex.additionalenchantments.enchantments;
 
 import eu.m0dex.additionalenchantments.enchantments.utils.*;
@@ -8,20 +7,11 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-=======
-package eu.m0dex.additionalenchantments.enchantments.utils;
-
-import eu.m0dex.additionalenchantments.enchantments.Enchantment;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
->>>>>>> 15a89794d4f796fdfe19580f67d53512ed01611c
 
 import java.util.Random;
 
 public class PoisonEnchantment extends Enchantment {
 
-<<<<<<< HEAD
     private int cooldown;
     private int effectLevel;
     private double baseChance;
@@ -34,13 +24,6 @@ public class PoisonEnchantment extends Enchantment {
     public PoisonEnchantment(CustomEnchantment[] requiredEnchantments, CustomEnchantment[] conflictingEnchantments) {
 
         super("Poison", EnchantmentTier.COMMON, ItemType.SWORDS, EnchantmentPriority.LOWEST, EnchantmentEventType.ENTITY_ENTITY_DAMAGE, requiredEnchantments, conflictingEnchantments);
-=======
-    private Random random;
-
-    public PoisonEnchantment(Enchantment[] requiredEnchantments, Enchantment[] conflictingEnchantments) {
-
-        super("Poison", EnchantmentTier.UNCOMMON, ItemType.SWORDS, requiredEnchantments, conflictingEnchantments);
->>>>>>> 15a89794d4f796fdfe19580f67d53512ed01611c
 
         random = new Random();
 
@@ -50,7 +33,6 @@ public class PoisonEnchantment extends Enchantment {
     @Override
     public void getConf(String rootKey) {
 
-<<<<<<< HEAD
         ConfigurationSection section = instance.getConfig().getConfigurationSection(rootKey);
 
         boolean configAvailable = section != null;
@@ -78,17 +60,5 @@ public class PoisonEnchantment extends Enchantment {
 
         if(roll < baseChance + chanceIncrease * (level-1))
             ((LivingEntity) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int)(20*(baseDuration+(level-1)*durationIncrease)), effectLevel - 1));
-=======
-    }
-
-    @Override
-    public void apply(Player player, ItemStack item) {
-
-    }
-
-    @Override
-    public <T extends Event> void handleEvent(T event) {
-
->>>>>>> 15a89794d4f796fdfe19580f67d53512ed01611c
     }
 }

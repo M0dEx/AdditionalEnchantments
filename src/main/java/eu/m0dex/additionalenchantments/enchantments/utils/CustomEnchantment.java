@@ -1,6 +1,5 @@
 package eu.m0dex.additionalenchantments.enchantments.utils;
 
-<<<<<<< HEAD
 import eu.m0dex.additionalenchantments.AdditionalEnchantments;
 import eu.m0dex.additionalenchantments.enchantments.Enchantment;
 import eu.m0dex.additionalenchantments.utils.Common;
@@ -25,13 +24,13 @@ public class CustomEnchantment {
     public static CustomEnchantment fromString(String string) {
         String[] split = string.split(Common.stripColours(string));
 
-        if(split.length != 2)
+        if (split.length != 2)
             return null;
 
         Enchantment _enchantment = AdditionalEnchantments.getInstance().getEnchantmentManager().getEnchantment(split[0].toLowerCase());
         int _level = Arrays.asList(Enchantment.romanNumerals).indexOf(split[1]);
 
-        if(_enchantment == null || _level == -1 || _level > _enchantment.getMaxLevel())
+        if (_enchantment == null || _level == -1 || _level > _enchantment.getMaxLevel())
             return null;
 
         return new CustomEnchantment(_enchantment, _level);
@@ -45,7 +44,7 @@ public class CustomEnchantment {
     @Override
     public boolean equals(Object object) {
 
-        if(!(object instanceof CustomEnchantment))
+        if (!(object instanceof CustomEnchantment))
             return false;
 
         CustomEnchantment other = (CustomEnchantment) object;
@@ -62,10 +61,7 @@ public class CustomEnchantment {
     }
 
     public void setLevel(int _level) {
-        if(_level >= 0 || _level < enchantment.getMaxLevel())
+        if (_level >= 0 || _level < enchantment.getMaxLevel())
             level = _level;
     }
-=======
-public class CustomEnchantment {
->>>>>>> 15a89794d4f796fdfe19580f67d53512ed01611c
 }

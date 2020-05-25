@@ -1,8 +1,8 @@
 package eu.m0dex.additionalenchantments.commands;
 
-<<<<<<< HEAD
 import eu.m0dex.additionalenchantments.AdditionalEnchantments;
 import eu.m0dex.additionalenchantments.enchantments.Enchantment;
+import eu.m0dex.additionalenchantments.enchantments.utils.EnchantmentManager;
 import eu.m0dex.additionalenchantments.utils.Common;
 import eu.m0dex.additionalenchantments.utils.Messages;
 import org.bukkit.command.CommandSender;
@@ -37,15 +37,11 @@ public class AdditionalEnchantmentsCommand extends CommandModule {
 
         Player player = (Player) sender;
 
-        instance.getLogger().info("Enchanting item: Player - " + player.getName() + ", Enchantment - " + enchantment.toEnchantmentString(args.getInt(2)));
-        instance.getEnchantmentManager().enchantItem(player.getItemInHand(), enchantment, args.getInt(2));
+        EnchantmentManager.enchantItem(player.getItemInHand(), enchantment, args.getInt(2));
     }
 
     @Override
     public void help(CommandSender sender) {
         Common.tell(sender, Messages.NO_PERMISSION);
     }
-=======
-public class AdditionalEnchantmentsCommand {
->>>>>>> 15a89794d4f796fdfe19580f67d53512ed01611c
 }
