@@ -45,4 +45,29 @@ public class EnchantmentManager {
 
         return foundEnchantments;
     }
+
+    public boolean enchantItem(ItemStack item, Enchantment enchantment, int level) {
+
+        if(item == null || /*!item.hasItemMeta() ||*/ !enchantment.isApplicableToItem(item, level))
+            return false;
+
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = (meta.hasLore() ? meta.getLore() : new ArrayList<>());
+
+        lore.add(enchantment.toEnchantmentString(level));
+
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+
+        return true;
+    }
+
+    public Enchantment getEnchantment(String name) {
+        name = name.toLowerCase();
+
+        if(enchantments.containsKey(name))
+            return enchantments.get(name);
+
+        return null;
+    }
 }
