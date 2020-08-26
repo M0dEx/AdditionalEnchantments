@@ -6,6 +6,9 @@ public enum Messages {
 
     // Basic messages
     PLAYER_ONLY_COMMAND(""),
+    ADDITIONAL_ENCHANTMENTS_HELP(""),
+    ENCHANTMENT_SUCCESSFUL("&3&lAdditionalEnchantments &e&l» &a&lSuccessfully enchanted the item with %enchantment%&a&l!"),
+    ENCHANTMENT_UNSUCCESSFUL("&3&lAdditionalEnchantments &e&l» &c&lCouldn't enchant the item with %enchantment%&c&l!"),
     NO_PERMISSION("&3&lAdditionalEnchantments &e&l» &c&lYou do not have the permission to do this!");
 
 

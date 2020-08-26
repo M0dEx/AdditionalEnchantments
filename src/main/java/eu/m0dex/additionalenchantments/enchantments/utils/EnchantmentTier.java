@@ -3,11 +3,12 @@ package eu.m0dex.additionalenchantments.enchantments.utils;
 import java.util.Arrays;
 
 public enum EnchantmentTier {
-	COMMON("&a"),
-	UNCOMMON("&b"),
-	RARE("&d"),
+
+	GODLY("&c"),
 	LEGENDARY("&6"),
-	GODLY("&c");
+	RARE("&d"),
+	UNCOMMON("&b"),
+	COMMON("&a");
 	
 	String value;
 	int cost;
@@ -26,13 +27,5 @@ public enum EnchantmentTier {
 		}
 		
 		return null;
-	}
-	
-	public int isBetterThan(EnchantmentTier other) {
-		
-		int thisIndex = Arrays.asList(EnchantmentTier.values()).indexOf(this);
-		int otherIndex = Arrays.asList(EnchantmentTier.values()).indexOf(other);
-		
-		return Integer.compare(otherIndex, thisIndex);
 	}
 }

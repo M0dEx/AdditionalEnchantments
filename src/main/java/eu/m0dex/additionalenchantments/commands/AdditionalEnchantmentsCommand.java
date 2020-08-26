@@ -2,6 +2,7 @@ package eu.m0dex.additionalenchantments.commands;
 
 import eu.m0dex.additionalenchantments.AdditionalEnchantments;
 import eu.m0dex.additionalenchantments.enchantments.Enchantment;
+import eu.m0dex.additionalenchantments.enchantments.utils.CustomEnchantment;
 import eu.m0dex.additionalenchantments.enchantments.utils.EnchantmentManager;
 import eu.m0dex.additionalenchantments.utils.Common;
 import eu.m0dex.additionalenchantments.utils.Messages;
@@ -30,18 +31,26 @@ public class AdditionalEnchantmentsCommand extends CommandModule {
 
     private void enchant(CommandSender sender, CommandContext args) {
 
-        Enchantment enchantment = instance.getEnchantmentManager().getEnchantment(args.getString(1));
-
-        if(enchantment == null || !(sender instanceof Player))
+        if(!(sender instanceof Player))
             return;
 
         Player player = (Player) sender;
 
-        EnchantmentManager.enchantItem(player.getItemInHand(), enchantment, args.getInt(2));
+        CustomEnchantment enchantment = new CustomEnchantment(instance.getEnchantmentManager().getEnchantment(args.getString(1)), args.getInt(2));
+
+        if(enchantment.getEnchantment() == null)
+            return;
+
+        if (EnchantmentManager.enchantItem(player.getItemInHand(), enchantment))
+            Common.tell(sender, Messages.ENCHANTMENT_SUCCESSFUL.getMessage("%enchantment%-" + enchantment.toString()));
+        else
+            Common.tell(sender, Messages.ENCHANTMENT_UNSUCCESSFUL.getMessage("%enchantment%-" + enchantment.toString()));
     }
 
     @Override
     public void help(CommandSender sender) {
-        Common.tell(sender, Messages.NO_PERMISSION);
+
+        if(Common.hasPermission(sender, "additionalenchantments.help"))
+            Common.tell(sender, Messages.ADDITIONAL_ENCHANTMENTS_HELP);
     }
 }

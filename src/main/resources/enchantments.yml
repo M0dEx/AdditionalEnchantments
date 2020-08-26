@@ -1,0 +1,87 @@
+enchantments:
+    common:
+        cowardice:
+            max-level: 3
+            cooldown: 5
+            speed-level: 2
+            base-chance: 10
+            chance-increase: 5
+            base-duration: 2
+            duration-increase: 1
+        poison:
+            max-level: 3
+            cooldown: 5
+            poison-level: 2
+            base-chance: 5
+            chance-increase: 2.5
+            base-duration: 2
+            duration-increase: 0.5
+        frost:
+            max-level: 3
+            cooldown: 5
+            slowness-level: 2
+            base-chance: 5
+            chance-increase: 2.5
+            base-duration: 2
+            duration-increase: 0.5
+        marksman:
+            max-level: 3
+            cooldown: 5
+            speed-level: 2
+            base-chance: 25
+            chance-increase: 5
+            base-duration: 2
+            duration-increase: 1
+#    uncommon:
+#        block:
+#            max-level: 3
+#            base-chance: 5
+#            chance-increase: 2.5
+#        frost-armor:
+#            max-level: 3
+#            weakness-level: 1
+#            base-chance: 5
+#            chance-increase: 2.5
+    rare:
+        shotgun:
+            max-level: 3
+            cooldown: 5
+            base-chance: 10
+            chance-increase: 5
+            base-arrows: 3
+            arrows-increase: 1
+            base-spread: 12
+            spread-decrease: 3
+        berserk:
+            max-level: 5
+            base-scaling: 1
+            scaling-increase: 0.0625
+        lifesteal:
+            max-level: 3
+            base-percentage: 20
+            percentage-increase: 10
+    legendary:
+        perfect-forge:
+            max-level: 5
+            base-reduction: 20
+            reduction-increase: 15
+#        deathbringer:
+#            max-level: 1
+#            damage-multiplier: 2
+#            base-chance: 25
+#            chance-increase: 0
+#        blessing:
+#            max-level: 3
+#            base-heal: 2
+#            heal-increase: 1.5
+#            base-chance: 5
+#            chance-increase: 2.5
+#        overload:
+#            max-level: 5
+#            base-hp: 2
+#            hp-increase: 2
+#    godly:
+#        planetary-deathbringer:
+#            max-level: 1
+#            damage-multiplier: 2.5
+#            base-chance: 25

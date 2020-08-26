@@ -14,7 +14,13 @@ public class CustomEnchantment {
 
     public CustomEnchantment(Enchantment _enchantment, int _level) {
         enchantment = _enchantment;
-        level = _level;
+
+        if(_level <= 0)
+            level = 1;
+        else if(_level > enchantment.getMaxLevel())
+            level = enchantment.getMaxLevel();
+        else
+            level = _level;
     }
 
     public <T extends Event> void handleEvent(T event) {
@@ -22,15 +28,22 @@ public class CustomEnchantment {
     }
 
     public static CustomEnchantment fromString(String string) {
-        String[] split = string.split(Common.stripColours(string));
 
-        if (split.length != 2)
+        string = Common.stripColours(string);
+
+        int sepIndex = string.lastIndexOf(" ");
+
+        if(sepIndex == -1)
             return null;
 
-        Enchantment _enchantment = AdditionalEnchantments.getInstance().getEnchantmentManager().getEnchantment(split[0].toLowerCase());
-        int _level = Arrays.asList(Enchantment.romanNumerals).indexOf(split[1]);
+        String name = string.substring(0, sepIndex).replace(" ", "");
+        int _level = Arrays.asList(Enchantment.romanNumerals).indexOf(string.substring(sepIndex + 1)) + 1;
 
-        if (_enchantment == null || _level == -1 || _level > _enchantment.getMaxLevel())
+        AdditionalEnchantments.getInstance().getLogger().info("Parsed enchantment name: " + name + ", level: " + _level);
+
+        Enchantment _enchantment = AdditionalEnchantments.getInstance().getEnchantmentManager().getEnchantment(name);
+
+        if (_enchantment == null || _level == 0)
             return null;
 
         return new CustomEnchantment(_enchantment, _level);
@@ -58,10 +71,5 @@ public class CustomEnchantment {
 
     public int getLevel() {
         return level;
-    }
-
-    public void setLevel(int _level) {
-        if (_level >= 0 || _level < enchantment.getMaxLevel())
-            level = _level;
     }
 }

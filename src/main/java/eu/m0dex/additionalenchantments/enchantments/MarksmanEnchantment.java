@@ -2,20 +2,17 @@ package eu.m0dex.additionalenchantments.enchantments;
 
 import eu.m0dex.additionalenchantments.enchantments.utils.*;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import eu.m0dex.additionalenchantments.enchantments.utils.EnchantmentTier;
-import eu.m0dex.additionalenchantments.enchantments.utils.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Random;
 
-public class FrostEnchantment extends Enchantment {
+public class MarksmanEnchantment extends Enchantment {
 
-    private int cooldown;
     private int effectLevel;
     private double baseChance;
     private double chanceIncrease;
@@ -24,9 +21,9 @@ public class FrostEnchantment extends Enchantment {
 
     private Random random;
 
-    public FrostEnchantment(CustomEnchantment[] requiredEnchantments, CustomEnchantment[] conflictingEnchantments) {
+    public MarksmanEnchantment(CustomEnchantment[] requiredEnchantments, CustomEnchantment[] conflictingEnchantments) {
 
-        super("Frost", EnchantmentTier.COMMON, ItemType.SWORDS, EnchantmentPriority.LOW, EnchantmentEventType.ENTITY_ENTITY_DAMAGE, requiredEnchantments, conflictingEnchantments);
+        super("Marksman", EnchantmentTier.COMMON, ItemType.BOW, EnchantmentPriority.LOWEST, EnchantmentEventType.ENTITY_ENTITY_DAMAGE, requiredEnchantments, conflictingEnchantments);
 
         random = new Random();
     }
@@ -42,9 +39,9 @@ public class FrostEnchantment extends Enchantment {
             instance.getLogger().severe("Couldn't load configuration values for the enchant " + name + " from the config! Loading default values...");
 
         maxLevel = (configAvailable ? section.getInt("max-level", 3) : 3);
-        cooldown = (configAvailable ? section.getInt("cooldown", 15) : 15);
-        effectLevel = (configAvailable ? section.getInt("slowness-level", 2) : 2);
-        baseChance = (configAvailable ? section.getDouble("base-chance", 10) : 10);
+        cooldown = (configAvailable ? section.getInt("cooldown", 5) : 5);
+        effectLevel = (configAvailable ? section.getInt("speed-level", 2) : 2);
+        baseChance = (configAvailable ? section.getDouble("base-chance", 25) : 25);
         chanceIncrease = (configAvailable ? section.getDouble("chance-increase", 5) : 5);
         baseDuration = (configAvailable ? section.getDouble("base-duration", 2) : 2);
         durationIncrease = (configAvailable ? section.getDouble("duration-increase", 1) : 1);
@@ -55,12 +52,12 @@ public class FrostEnchantment extends Enchantment {
 
         EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
 
-        Player player = (Player) e.getDamager();
+        Player player = (Player) ((Projectile) e.getDamager()).getShooter();
 
         int roll = random.nextInt(100) + 1;
 
         if(roll <= baseChance + chanceIncrease * (level-1) && !isOnCooldown(player)) {
-            ((LivingEntity) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (20 * (baseDuration + (level - 1) * durationIncrease)), effectLevel - 1));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, (int) (20 * (baseDuration + (level - 1) * durationIncrease)), effectLevel - 1));
             putOnCooldown(player);
         }
     }

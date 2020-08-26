@@ -5,23 +5,34 @@ import eu.m0dex.additionalenchantments.commands.CommandExecutor;
 import eu.m0dex.additionalenchantments.commands.CommandModule;
 import eu.m0dex.additionalenchantments.enchantments.utils.EnchantmentManager;
 import eu.m0dex.additionalenchantments.listeners.EnchantmentsListener;
+import eu.m0dex.additionalenchantments.listeners.PlayerListener;
+import eu.m0dex.additionalenchantments.playerdata.PlayerCache;
 import eu.m0dex.additionalenchantments.utils.Configuration;
 import eu.m0dex.additionalenchantments.utils.Messages;
 import eu.m0dex.additionalenchantments.utils.Metrics;
+import eu.m0dex.additionalenchantments.utils.Settings;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class AdditionalEnchantments extends JavaPlugin {
+
+    private PlayerCache playerCache;
 
     private EnchantmentManager enchantmentManager;
 
     private Map<String, CommandModule> commands;
     private CommandExecutor cmdExec;
 
+    private Configuration mainCfg;
     private Configuration messagesCfg;
+    private Configuration enchantmentCfg;
+
+    private Settings settings;
 
     private Metrics metrics;
 
@@ -32,7 +43,13 @@ public class AdditionalEnchantments extends JavaPlugin {
 
         instance = this;
 
-        loadConfigs();
+        playerCache = new PlayerCache();
+
+        if(!loadConfigs()) {
+            getLogger().severe("Something went wrong while loading the config files!");
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         enchantmentManager = new EnchantmentManager(this);
 
@@ -50,16 +67,22 @@ public class AdditionalEnchantments extends JavaPlugin {
     /**
      * Loads configs
      */
-    private void loadConfigs() {
+    private boolean loadConfigs() {
 
-        messagesCfg =   new Configuration(this, "", "messages.yml");
-        messagesCfg.reloadConfig();
+        mainCfg =           new Configuration(this, "", "config.yml");
+        messagesCfg =       new Configuration(this, "", "messages.yml");
+        enchantmentCfg =    new Configuration(this, "", "enchantments.yml");
 
-        instance.saveDefaultConfig();
-        instance.getConfig().options().copyDefaults(true);
-        instance.saveConfig();
+        boolean cfgLoaded = mainCfg.loadConfig() && enchantmentCfg.loadConfig() && messagesCfg.loadConfig();
+
+        if(!cfgLoaded)
+            return false;
+
+        settings = new Settings(this, mainCfg);
 
         loadMessages();
+
+        return true;
     }
 
     /**
@@ -97,6 +120,7 @@ public class AdditionalEnchantments extends JavaPlugin {
 
         PluginManager pm = this.getServer().getPluginManager();
 
+        pm.registerEvents(new PlayerListener(this), this);
         pm.registerEvents(new EnchantmentsListener(this), this);
     }
 
@@ -123,7 +147,11 @@ public class AdditionalEnchantments extends JavaPlugin {
         return instance;
     }
 
+    public FileConfiguration getEnchantmentConfig() { return enchantmentCfg.getConfig(); }
+
     public EnchantmentManager getEnchantmentManager() { return enchantmentManager; }
+
+    public PlayerCache getPlayerCache() { return playerCache; }
 
     public CommandModule getCommandModule(String cmdName) { return commands.get(cmdName); }
 }

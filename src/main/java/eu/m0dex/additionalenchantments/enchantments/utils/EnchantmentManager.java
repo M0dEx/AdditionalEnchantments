@@ -1,18 +1,12 @@
 package eu.m0dex.additionalenchantments.enchantments.utils;
 
 import eu.m0dex.additionalenchantments.AdditionalEnchantments;
-import eu.m0dex.additionalenchantments.enchantments.CowardiceEnchantment;
-import eu.m0dex.additionalenchantments.enchantments.Enchantment;
-import eu.m0dex.additionalenchantments.enchantments.FrostEnchantment;
-import eu.m0dex.additionalenchantments.enchantments.PoisonEnchantment;
+import eu.m0dex.additionalenchantments.enchantments.*;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EnchantmentManager {
 
@@ -29,6 +23,11 @@ public class EnchantmentManager {
         enchantments.put("cowardice", new CowardiceEnchantment(new CustomEnchantment[] {}, new CustomEnchantment[] {}));
         enchantments.put("poison", new PoisonEnchantment(new CustomEnchantment[] {}, new CustomEnchantment[] {}));
         enchantments.put("frost", new FrostEnchantment(new CustomEnchantment[] {}, new CustomEnchantment[] {}));
+        enchantments.put("marksman", new MarksmanEnchantment(new CustomEnchantment[] {}, new CustomEnchantment[] {}));
+        enchantments.put("shotgun", new ShotgunEnchantment(new CustomEnchantment[] {}, new CustomEnchantment[] {}));
+        enchantments.put("berserk", new BerserkEnchantment(new CustomEnchantment[] {}, new CustomEnchantment[] {}));
+        enchantments.put("lifesteal", new LifestealEnchantment(new CustomEnchantment[] {}, new CustomEnchantment[] {}));
+        enchantments.put("perfectforge", new PerfectForgeEnchantment(new CustomEnchantment[] {}, new CustomEnchantment[] {}));
     }
 
     /**
@@ -41,7 +40,7 @@ public class EnchantmentManager {
 
         List<CustomEnchantment> foundEnchantments = new ArrayList<>();
 
-        if(item == null || !item.hasItemMeta())
+        if(item == null)
             return foundEnchantments;
 
         ItemMeta meta = item.getItemMeta();
@@ -71,7 +70,7 @@ public class EnchantmentManager {
 
         List<CustomEnchantment> foundEnchantments = new ArrayList<>();
 
-        if(item == null || item.getType() == Material.AIR || item.getItemMeta() == null)
+        if(item == null || item.getType() == Material.AIR)
             return foundEnchantments;
 
         ItemMeta meta = item.getItemMeta();
@@ -98,6 +97,8 @@ public class EnchantmentManager {
      */
     private static void putEnchantmentsOnItem(ItemStack item, List<CustomEnchantment> enchantments) {
 
+        enchantments.sort(Comparator.comparing(CustomEnchantment::getEnchantment));
+
         ItemMeta meta = item.getItemMeta();
         List<String> lore = new ArrayList<>();
 
@@ -113,23 +114,21 @@ public class EnchantmentManager {
      *
      * @param item Item to enchant
      * @param enchantment Enchantment to put on the item
-     * @param level Level of the enchantment
      * @return True if enchanting the item was successful, false if it was not
      */
-    public static boolean enchantItem(ItemStack item, Enchantment enchantment, int level) {
+    public static boolean enchantItem(ItemStack item, CustomEnchantment enchantment) {
 
         List<CustomEnchantment> enchantmentsOnItem = getEnchantmentsOnItem(item);
 
-        if(!enchantment.isApplicableToItem(enchantmentsOnItem, item, level))
+        if(!enchantment.getEnchantment().isApplicableToItem(enchantmentsOnItem, item, enchantment.getLevel()))
             return false;
 
-        CustomEnchantment newEnchantment = new CustomEnchantment(enchantment, level);
-        int index = enchantmentsOnItem.indexOf(newEnchantment);
+        int index = enchantmentsOnItem.indexOf(enchantment);
 
         if(index != -1)
-            enchantmentsOnItem.set(index, newEnchantment);
+            enchantmentsOnItem.set(index, enchantment);
         else
-            enchantmentsOnItem.add(newEnchantment);
+            enchantmentsOnItem.add(enchantment);
 
         putEnchantmentsOnItem(item, enchantmentsOnItem);
 
@@ -137,11 +136,6 @@ public class EnchantmentManager {
     }
 
     public Enchantment getEnchantment(String name) {
-        name = name.toLowerCase();
-
-        if(enchantments.containsKey(name))
-            return enchantments.get(name);
-
-        return null;
+        return enchantments.getOrDefault(name.toLowerCase(), null);
     }
 }

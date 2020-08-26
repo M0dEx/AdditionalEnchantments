@@ -2,13 +2,14 @@ package eu.m0dex.additionalenchantments.enchantments;
 
 import eu.m0dex.additionalenchantments.AdditionalEnchantments;
 import eu.m0dex.additionalenchantments.enchantments.utils.*;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class Enchantment {
+public abstract class Enchantment implements Comparable<Enchantment> {
 
 	String name;
 	EnchantmentTier tier;
@@ -16,6 +17,7 @@ public abstract class Enchantment {
 	EnchantmentPriority priority;
 	EnchantmentEventType eventType;
 	int maxLevel;
+	int cooldown;
 	List<CustomEnchantment> requiredEnchants;
 	List<CustomEnchantment> conflictingEnchants;
 
@@ -34,6 +36,8 @@ public abstract class Enchantment {
 		conflictingEnchants = Arrays.asList(_conflictingEnchantments);
 
 		instance = AdditionalEnchantments.getInstance();
+
+		getConf("enchantments." + tier.name().toLowerCase().replace(" ", "-") + "." + name.toLowerCase());
 	}
 
 	public boolean isApplicableToItem(List<CustomEnchantment> enchantmentsOnItem, ItemStack item, int level) {
@@ -56,6 +60,16 @@ public abstract class Enchantment {
 		return true;
 	}
 
+	public boolean isOnCooldown(Player player) {
+
+		return instance.getPlayerCache().getPlayerData(player.getUniqueId()).isOnCooldown(this);
+	}
+
+	public void putOnCooldown(Player player) {
+
+		instance.getPlayerCache().getPlayerData(player.getUniqueId()).putOnCooldown(this);
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -71,6 +85,9 @@ public abstract class Enchantment {
 	public EnchantmentEventType getEventType() {
 		return eventType;
 	}
+	public int getCooldown() {
+		return cooldown*1000;
+	}
 
 	public abstract void getConf(String rootKey);
 
@@ -84,5 +101,16 @@ public abstract class Enchantment {
 		Enchantment other = (Enchantment) object;
 
 		return this.getName().equals(other.getName());
+	}
+
+	@Override
+	public int compareTo(Enchantment other) {
+
+		int result = this.getTier().compareTo(other.getTier());
+
+		if(result == 0)
+			return this.getName().compareTo(other.getName());
+		else
+			return result;
 	}
 }

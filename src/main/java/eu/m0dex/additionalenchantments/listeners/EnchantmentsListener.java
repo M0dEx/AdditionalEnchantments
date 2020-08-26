@@ -4,13 +4,12 @@ import eu.m0dex.additionalenchantments.AdditionalEnchantments;
 import eu.m0dex.additionalenchantments.enchantments.utils.CustomEnchantment;
 import eu.m0dex.additionalenchantments.enchantments.utils.EnchantmentEventType;
 import eu.m0dex.additionalenchantments.enchantments.utils.EnchantmentManager;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.util.ArrayList;
@@ -29,11 +28,14 @@ public class EnchantmentsListener implements Listener {
         enchantmentManager = instance.getEnchantmentManager();
     }
 
+    /**
+     *  Handles most of damage events
+     */
     @EventHandler(ignoreCancelled = true)
-    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
 
-        Entity damaged = event.getEntity();
-        Entity damager = event.getDamager();
+        Entity damaged = e.getEntity();
+        Entity damager = e.getDamager();
 
         List<CustomEnchantment> enchantments = new ArrayList<>();
 
@@ -56,13 +58,21 @@ public class EnchantmentsListener implements Listener {
         /*
             OFFENCE ENCHANTMENTS
          */
-        if(damager instanceof Player) {
+        if(damager instanceof Player && damaged instanceof LivingEntity) {
+
+            /*
+                MELEE WEAPONS
+             */
 
             Player playerDamager = (Player) damager;
 
             enchantments.addAll(EnchantmentManager.getEnchantmentsOnItem(playerDamager.getItemInHand(), EnchantmentEventType.ENTITY_ENTITY_DAMAGE));
 
-        } else if(damager instanceof Projectile) {
+        } else if(damager instanceof Projectile && damaged instanceof LivingEntity) {
+
+            /*
+                BOWS
+             */
 
             Projectile projectile = (Projectile) damager;
 
@@ -74,9 +84,55 @@ public class EnchantmentsListener implements Listener {
             }
         }
 
-        enchantments.sort(Comparator.comparing(ench -> ench.getEnchantment().getEventPriority().getPriority()));
+        instance.getLogger().info("Size of List<CustomEnchantment> at onEntityDamageByEntityEvent(): " + enchantments.size());
+
+        enchantments.sort(Comparator.comparing(ench -> ench.getEnchantment().getEventPriority()));
 
         for(CustomEnchantment enchantment : enchantments)
-            enchantment.handleEvent(event);
+            enchantment.handleEvent(e);
+    }
+
+    /**
+     * Handles players shooting bows
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityShootBowEvent(EntityShootBowEvent e) {
+
+        List<CustomEnchantment> enchantments = new ArrayList<>();
+
+        if(e.getEntity() instanceof Player) {
+
+            Player player = (Player) e.getEntity();
+
+            if(e.getProjectile() instanceof Arrow) {
+
+                Arrow projectile = (Arrow) e.getProjectile();
+
+                enchantments.addAll(EnchantmentManager.getEnchantmentsOnItem(e.getBow(), EnchantmentEventType.ENTITY_SHOOT_BOW));
+            }
+        }
+
+        instance.getLogger().info("Size of List<CustomEnchantment> at onEntityShootBowEvent(): " + enchantments.size());
+
+        enchantments.sort(Comparator.comparing(ench -> ench.getEnchantment().getEventPriority()));
+
+        for(CustomEnchantment enchantment : enchantments)
+            enchantment.handleEvent(e);
+    }
+
+    /**
+     * Handles item damage
+     */
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerItemDamageEvent(PlayerItemDamageEvent e) {
+
+        List<CustomEnchantment> enchantments = EnchantmentManager.getEnchantmentsOnItem(e.getItem(), EnchantmentEventType.ITEM_DAMAGE);
+
+        instance.getLogger().info("Size of List<CustomEnchantment> at onPlayerItemDamageEvent(): " + enchantments.size());
+
+        enchantments.sort(Comparator.comparing(ench -> ench.getEnchantment().getEventPriority()));
+
+        for(CustomEnchantment enchantment : enchantments)
+            enchantment.handleEvent(e);
     }
 }
