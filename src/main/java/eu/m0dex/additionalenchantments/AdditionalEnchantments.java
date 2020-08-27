@@ -12,6 +12,7 @@ import eu.m0dex.additionalenchantments.utils.Messages;
 import eu.m0dex.additionalenchantments.utils.Metrics;
 import eu.m0dex.additionalenchantments.utils.Settings;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,12 +46,6 @@ public class AdditionalEnchantments extends JavaPlugin {
 
         playerCache = new PlayerCache();
 
-        if(!loadConfigs()) {
-            getLogger().severe("Something went wrong while loading the config files!");
-            this.getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
         enchantmentManager = new EnchantmentManager(this);
 
         registerCommands();
@@ -62,6 +57,20 @@ public class AdditionalEnchantments extends JavaPlugin {
     @Override
     public void onDisable() {
 
+        HandlerList.unregisterAll(this);
+    }
+
+    public void reload() {
+
+        if(!loadConfigs()) {
+            getLogger().severe("Something went wrong while loading the config files!");
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        enchantmentManager = new EnchantmentManager(this);
+
+        registerListeners();
     }
 
     /**
@@ -133,7 +142,7 @@ public class AdditionalEnchantments extends JavaPlugin {
     }
 
     public void addCommand(String cmdName, CommandModule module) {
-        if(commands != null && !commands.containsKey(cmdName)) {
+        if(commands != null) {
             commands.put(cmdName, module);
             this.getCommand(cmdName).setExecutor(cmdExec);
         }
@@ -146,6 +155,8 @@ public class AdditionalEnchantments extends JavaPlugin {
     public static AdditionalEnchantments getInstance() {
         return instance;
     }
+
+    public Settings getSettings() { return settings; }
 
     public FileConfiguration getEnchantmentConfig() { return enchantmentCfg.getConfig(); }
 

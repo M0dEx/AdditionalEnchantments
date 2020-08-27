@@ -29,7 +29,7 @@ public class EnchantmentsListener implements Listener {
     }
 
     /**
-     *  Handles most of damage events
+     *  Handles a lot of damage events
      */
     @EventHandler(ignoreCancelled = true)
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
@@ -84,7 +84,8 @@ public class EnchantmentsListener implements Listener {
             }
         }
 
-        instance.getLogger().info("Size of List<CustomEnchantment> at onEntityDamageByEntityEvent(): " + enchantments.size());
+        if(instance.getSettings().debug)
+            instance.getLogger().info("Size of List<CustomEnchantment> at onEntityDamageByEntityEvent(): " + enchantments.size());
 
         enchantments.sort(Comparator.comparing(ench -> ench.getEnchantment().getEventPriority()));
 
@@ -112,7 +113,8 @@ public class EnchantmentsListener implements Listener {
             }
         }
 
-        instance.getLogger().info("Size of List<CustomEnchantment> at onEntityShootBowEvent(): " + enchantments.size());
+        if(instance.getSettings().debug)
+            instance.getLogger().info("Size of List<CustomEnchantment> at onEntityShootBowEvent(): " + enchantments.size());
 
         enchantments.sort(Comparator.comparing(ench -> ench.getEnchantment().getEventPriority()));
 
@@ -128,7 +130,8 @@ public class EnchantmentsListener implements Listener {
 
         List<CustomEnchantment> enchantments = EnchantmentManager.getEnchantmentsOnItem(e.getItem(), EnchantmentEventType.ITEM_DAMAGE);
 
-        instance.getLogger().info("Size of List<CustomEnchantment> at onPlayerItemDamageEvent(): " + enchantments.size());
+        if(instance.getSettings().debug)
+            instance.getLogger().info("Size of List<CustomEnchantment> at onPlayerItemDamageEvent(): " + enchantments.size());
 
         enchantments.sort(Comparator.comparing(ench -> ench.getEnchantment().getEventPriority()));
 

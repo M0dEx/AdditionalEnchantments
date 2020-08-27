@@ -23,6 +23,9 @@ public class AdditionalEnchantmentsCommand extends CommandModule {
             case "enchant":
                 enchant(sender, args);
                 break;
+            case "reload":
+                reload(sender);
+                break;
             default:
                 help(sender);
                 break;
@@ -45,6 +48,15 @@ public class AdditionalEnchantmentsCommand extends CommandModule {
             Common.tell(sender, Messages.ENCHANTMENT_SUCCESSFUL.getMessage("%enchantment%-" + enchantment.toString()));
         else
             Common.tell(sender, Messages.ENCHANTMENT_UNSUCCESSFUL.getMessage("%enchantment%-" + enchantment.toString()));
+    }
+
+    private void reload(CommandSender sender) {
+
+        if(!Common.hasPermission(sender, "additionalenchantment.admin.reload"))
+            return;
+
+        instance.reload();
+        Common.tell(sender, Messages.PLUGIN_RELOADED);
     }
 
     @Override

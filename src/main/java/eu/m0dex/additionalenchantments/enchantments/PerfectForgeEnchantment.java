@@ -40,7 +40,8 @@ public class PerfectForgeEnchantment extends Enchantment {
 
         int itemDamage = (int)(e.getDamage() * (100 - (baseReduction + (level - 1) * reductionIncrease)) / 100);
 
-        instance.getLogger().info("Original item damage: " + e.getDamage() + ", damage after Perfect Forge: " + itemDamage);
+        if(instance.getSettings().debug)
+            instance.getLogger().info("Original item damage: " + e.getDamage() + ", damage after Perfect Forge: " + itemDamage);
 
         e.setDamage(itemDamage);
     }

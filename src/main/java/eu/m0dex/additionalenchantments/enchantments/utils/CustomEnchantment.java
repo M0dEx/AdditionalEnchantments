@@ -17,10 +17,8 @@ public class CustomEnchantment {
 
         if(_level <= 0)
             level = 1;
-        else if(_level > enchantment.getMaxLevel())
-            level = enchantment.getMaxLevel();
         else
-            level = _level;
+            level = Math.min(_level, enchantment.getMaxLevel());
     }
 
     public <T extends Event> void handleEvent(T event) {
@@ -28,6 +26,8 @@ public class CustomEnchantment {
     }
 
     public static CustomEnchantment fromString(String string) {
+
+        AdditionalEnchantments instance = AdditionalEnchantments.getInstance();
 
         string = Common.stripColours(string);
 
@@ -39,9 +39,10 @@ public class CustomEnchantment {
         String name = string.substring(0, sepIndex).replace(" ", "");
         int _level = Arrays.asList(Enchantment.romanNumerals).indexOf(string.substring(sepIndex + 1)) + 1;
 
-        AdditionalEnchantments.getInstance().getLogger().info("Parsed enchantment name: " + name + ", level: " + _level);
+        if(instance.getSettings().debug)
+            instance.getLogger().info("Parsed enchantment name: " + name + ", level: " + _level);
 
-        Enchantment _enchantment = AdditionalEnchantments.getInstance().getEnchantmentManager().getEnchantment(name);
+        Enchantment _enchantment = instance.getEnchantmentManager().getEnchantment(name);
 
         if (_enchantment == null || _level == 0)
             return null;

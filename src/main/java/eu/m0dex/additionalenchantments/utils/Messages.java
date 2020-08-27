@@ -4,16 +4,26 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public enum Messages {
 
-    // Basic messages
+    //region MISC MESSAGES
     PLAYER_ONLY_COMMAND(""),
     ADDITIONAL_ENCHANTMENTS_HELP(""),
     ENCHANTMENT_SUCCESSFUL("&3&lAdditionalEnchantments &e&l» &a&lSuccessfully enchanted the item with %enchantment%&a&l!"),
     ENCHANTMENT_UNSUCCESSFUL("&3&lAdditionalEnchantments &e&l» &c&lCouldn't enchant the item with %enchantment%&c&l!"),
-    NO_PERMISSION("&3&lAdditionalEnchantments &e&l» &c&lYou do not have the permission to do this!");
+    NO_PERMISSION("&3&lAdditionalEnchantments &e&l» &c&lYou do not have the permission to do this!"),
+    //endregion
 
+    //region ADMIN MENU
+    ADMIN_MENU_TITLE("&3&lAdmin Menu"),
+    ADMIN_MENU_EXIT("&c&lExit"),
+    ADMIN_MENU_RELOAD("&2&lReload AE"),
+    //endregion
 
-    private String path;
-    private String value;
+    //region ADMIN COMMANDS
+    PLUGIN_RELOADED("&3&lAdditionalEnchantments &e&l» &a&lSuccessfully reloaded the plugin!");
+    //endregion
+
+    private final String path;
+    private final String value;
 
     private static FileConfiguration conf;
 
