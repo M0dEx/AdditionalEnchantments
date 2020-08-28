@@ -1,2 +1,19 @@
+prices:
+    common:
+        experience: 5
+        money: 1000
+    uncommon:
+        experience: 15
+        money: 3000
+    rare:
+        experience: 30
+        money: 5000
+    legendary:
+        experience: 50
+        money: 10000
+    godly:
+        experience: 100
+        money: 25000
+
 misc:
     debug: true

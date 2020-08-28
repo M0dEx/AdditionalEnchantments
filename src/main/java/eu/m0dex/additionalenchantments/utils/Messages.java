@@ -18,6 +18,11 @@ public enum Messages {
     ADMIN_MENU_RELOAD("&2&lReload AE"),
     //endregion
 
+    //region ENCHANTER MENU
+    ENCHANTER_TITLE("&3&lEnchanter"),
+    ENCHANTER_HINT_LORE(""),
+    //endregion
+
     //region ADMIN COMMANDS
     PLUGIN_RELOADED("&3&lAdditionalEnchantments &e&l» &a&lSuccessfully reloaded the plugin!");
     //endregion

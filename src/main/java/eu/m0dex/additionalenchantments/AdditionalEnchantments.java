@@ -3,6 +3,7 @@ package eu.m0dex.additionalenchantments;
 import eu.m0dex.additionalenchantments.commands.AdditionalEnchantmentsCommand;
 import eu.m0dex.additionalenchantments.commands.CommandExecutor;
 import eu.m0dex.additionalenchantments.commands.CommandModule;
+import eu.m0dex.additionalenchantments.commands.EnchanterCommand;
 import eu.m0dex.additionalenchantments.enchantments.utils.EnchantmentManager;
 import eu.m0dex.additionalenchantments.listeners.EnchantmentsListener;
 import eu.m0dex.additionalenchantments.listeners.PlayerListener;
@@ -11,6 +12,7 @@ import eu.m0dex.additionalenchantments.utils.Configuration;
 import eu.m0dex.additionalenchantments.utils.Messages;
 import eu.m0dex.additionalenchantments.utils.Metrics;
 import eu.m0dex.additionalenchantments.utils.Settings;
+import fr.minuskube.inv.InventoryManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
@@ -33,6 +35,8 @@ public class AdditionalEnchantments extends JavaPlugin {
     private Configuration messagesCfg;
     private Configuration enchantmentCfg;
 
+    private InventoryManager inventoryManager;
+
     private Settings settings;
 
     private Metrics metrics;
@@ -46,7 +50,16 @@ public class AdditionalEnchantments extends JavaPlugin {
 
         playerCache = new PlayerCache();
 
+        if(!loadConfigs()) {
+            getLogger().severe("Something went wrong while loading the config files!");
+            this.getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         enchantmentManager = new EnchantmentManager(this);
+
+        inventoryManager = new InventoryManager(this);
+        inventoryManager.init();
 
         registerCommands();
         registerListeners();
@@ -120,6 +133,7 @@ public class AdditionalEnchantments extends JavaPlugin {
         cmdExec = new CommandExecutor(this);
 
         new AdditionalEnchantmentsCommand(this);
+        new EnchanterCommand(this);
     }
 
     /**
@@ -161,6 +175,8 @@ public class AdditionalEnchantments extends JavaPlugin {
     public FileConfiguration getEnchantmentConfig() { return enchantmentCfg.getConfig(); }
 
     public EnchantmentManager getEnchantmentManager() { return enchantmentManager; }
+
+    public InventoryManager getInventoryManager() { return inventoryManager; }
 
     public PlayerCache getPlayerCache() { return playerCache; }
 

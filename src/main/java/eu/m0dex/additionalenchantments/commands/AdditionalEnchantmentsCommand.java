@@ -12,13 +12,13 @@ import org.bukkit.entity.Player;
 public class AdditionalEnchantmentsCommand extends CommandModule {
 
     public AdditionalEnchantmentsCommand(AdditionalEnchantments instance) {
-        super(instance, "additionalenchantments", "", 0, 3, false);
+        super(instance, "additionalenchantments", "", 0, 3, true);
     }
 
     @Override
     public void run(CommandSender sender, CommandContext args) {
 
-        switch(args.getString(0).toLowerCase()) {
+        switch(args.getString(0)) {
 
             case "enchant":
                 enchant(sender, args);

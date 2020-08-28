@@ -37,7 +37,7 @@ public abstract class Enchantment implements Comparable<Enchantment> {
 
 		instance = AdditionalEnchantments.getInstance();
 
-		getConf("enchantments." + tier.name().toLowerCase().replace(" ", "-") + "." + name.toLowerCase());
+		getConf("enchantments." + tier.name().toLowerCase() + "." + name.toLowerCase().replace(" ", "-"));
 	}
 
 	public boolean isApplicableToItem(List<CustomEnchantment> enchantmentsOnItem, ItemStack item, int level) {

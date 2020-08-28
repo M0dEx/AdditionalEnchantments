@@ -7,3 +7,6 @@ commands:
         description: Main command.
         usage: /ae
         aliases: ae
+    enchanter:
+        description: Opens the enchanter.
+        usage: /enchanter
